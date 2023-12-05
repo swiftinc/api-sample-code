@@ -1,0 +1,39 @@
+name: Python
+on:
+  push:
+    branches: [main]
+    paths:
+      - "python/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "python/**"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    env:
+      CONSUMER_KEY: ${{ vars.CONSUMER_KEY }}
+      CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+        os: ["ubuntu-latest", "windows-latest"]
+    name: Build and Test ${{ matrix.python-version }} (${{ matrix.os }})
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        working-directory: python
+        run: |
+          pip install wheel
+          pip install -r requirements.txt
+      - name: Test Messaging API
+        working-directory: python/messaging-api
+        run: python -m pytest

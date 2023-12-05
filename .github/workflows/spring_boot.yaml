@@ -1,0 +1,45 @@
+name: Spring Boot
+on:
+  push:
+    branches: [main]
+    paths:
+      - "java/spring-boot/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "java/spring-boot/**"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ["17"]
+        os: ["ubuntu-latest", "windows-latest"]
+    env:
+      CONSUMER_KEY: ${{ vars.CONSUMER_KEY }}
+      CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+    name: Build and Test ${{ matrix.Java }} (${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ matrix.java }}
+          cache: "maven"
+      - name: Test Messaging API
+        working-directory: java/spring-boot/messaging-api
+        run: ./mvnw -B verify --file pom.xml
+      - name: Test Pre-Validation
+        working-directory: java/spring-boot/preval
+        run: ./mvnw -B verify --file pom.xml
+      - name: Test Swift gpi
+        working-directory: java/spring-boot/gpi
+        run: ./mvnw -B verify --file pom.xml
+      - name: Test SwiftRef
+        working-directory: java/spring-boot/swiftref
+        run: ./mvnw -B verify --file pom.xml

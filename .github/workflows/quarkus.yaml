@@ -1,0 +1,42 @@
+name: Quarkus
+on:
+  push:
+    branches: [main]
+    paths:
+      - "java/quarkus/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "java/quarkus/**"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ["17"]
+        os: ["ubuntu-latest", "windows-latest"]
+    env:
+      CONSUMER_KEY: ${{ vars.CONSUMER_KEY }}
+      CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+    name: Build and Test ${{ matrix.Java }} (${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: "temurin"
+          cache: "maven"
+      - name: Test Messaging API
+        working-directory: java/quarkus/messaging-api
+        run: ./mvnw -B verify -DskipITs=false --file pom.xml
+      - name: Test Pre-Validation
+        working-directory: java/quarkus/preval
+        run: ./mvnw -B verify -DskipITs=false --file pom.xml
+      - name: Test SwiftRef
+        working-directory: java/quarkus/swiftref
+        run: ./mvnw -B verify -DskipITs=false --file pom.xml

@@ -1,0 +1,45 @@
+name: Node.js
+on:
+  push:
+    branches: [main]
+    paths:
+      - "nodejs/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "nodejs/**"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    env:
+      CONSUMER_KEY: ${{ vars.CONSUMER_KEY }}
+      CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+        os: ["ubuntu-latest", "windows-latest"]
+    name: Build and Test ${{ matrix.node-version }} (${{ matrix.os }})
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java for OpenAPI generator plugin
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Test Messaging API
+        working-directory: nodejs/messaging-api
+        run: npm install && npm run test
+      - name: Test Pre-Validation
+        working-directory: nodejs/preval
+        run: npm install && npm run test
+      - name: Test SwiftRef
+        working-directory: nodejs/swiftref
+        run: npm install && npm run test

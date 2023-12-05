@@ -1,0 +1,40 @@
+name: .NET
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dotnet/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "dotnet/**"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        dotnet-version: ["6.0.x", "7.0.x"]
+        os: ["ubuntu-latest", "windows-latest"]
+    env:
+      CONSUMER_KEY: ${{ vars.CONSUMER_KEY }}
+      CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+    name: Build and Test ${{ matrix.dotnet-version }} (${{ matrix.os }})
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Test Messaging API
+        working-directory: dotnet/MessagingApi
+        run: dotnet test MessagingApi.sln
+      - name: Test Pre-Validation
+        working-directory: dotnet/PreVal
+        run: dotnet test PreVal.sln
+      - name: Test Pre-Validation
+        working-directory: dotnet/SwiftRef
+        run: dotnet test SwiftRef.sln

@@ -1,0 +1,51 @@
+swift:
+  base-url: https://sandbox.swift.com
+  endpoint: ${swift.base-url}/swift-preval-pilot/v2
+  # Proxy settings, uncomment to enable proxy
+  #proxy:
+  #  host: myproxy.corp
+  #  port: 48600
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          swift:
+            client-id: ${CONSUMER_KEY}
+            client-secret: ${CONSUMER_SECRET}
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
+            scope: swift.preval!p
+        provider:
+          swift:
+            token-uri: ${swift.base-url}/oauth2/v1/token
+  ssl:
+    bundle:
+      jks:
+        channel:
+          key:
+            alias: channel
+            password: Abcd1234
+          keystore:
+            location: classpath:sandbox_keystore.jks
+            password: Abcd1234
+            type: JKS
+      # Before deploying to production
+      #   1. Download SwiftNet Root CA https://www2.swift.com/knowledgecentre/kb_articles/5024117
+      #   2. Rename the downloaded file to swift_ca.crt and copy the file to the resources folder
+      #   3. Uncomment below lines to make a request in production
+      #pem:
+      #  client:
+      #    truststore:
+      #      certificate: classpath:swift_ca.crt
+
+springdoc:
+  swagger-ui:
+    path: /test
+    defaultModelRendering: model
+    defaultModelsExpandDepth: -1
+
+logging:
+  level:
+    org.apache.hc.client5.http.headers: DEBUG

@@ -1,0 +1,149 @@
+version: 2
+updates:
+  # Spring Boot
+  - package-ecosystem: maven
+    directory: "/java/spring-boot/messaging-api"
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: org.apache.maven:*
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+  - package-ecosystem: maven
+    directory: "/java/spring-boot/preval"
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: org.apache.maven:*
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+  - package-ecosystem: maven
+    directory: "/java/spring-boot/swiftref"
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: org.apache.maven:*
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+
+  # Quarkus
+  - package-ecosystem: maven
+    directory: "/java/quarkus/messaging-api"
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: org.apache.maven:*
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+  - package-ecosystem: maven
+    directory: "/java/quarkus/preval"
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: org.apache.maven:*
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+  - package-ecosystem: maven
+    directory: "/java/quarkus/swiftref"
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: org.apache.maven:*
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+
+  # nodejs
+  - package-ecosystem: npm
+    directory: "/nodejs/messaging-api"
+    schedule:
+      interval: monthly
+    versioning-strategy: increase
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+  - package-ecosystem: npm
+    directory: "/nodejs/preval"
+    schedule:
+      interval: monthly
+    versioning-strategy: increase
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+  - package-ecosystem: npm
+    directory: "/nodejs/swiftref"
+    schedule:
+      interval: monthly
+    versioning-strategy: increase
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+
+  # dotnet
+  - package-ecosystem: "nuget"
+    directory: "/dotnet/MessagingApi"
+    schedule:
+      interval: "monthly"
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+  - package-ecosystem: "nuget"
+    directory: "/dotnet/PreVal"
+    schedule:
+      interval: "monthly"
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+  - package-ecosystem: "nuget"
+    directory: "/dotnet/SwiftRef"
+    schedule:
+      interval: "monthly"
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+
+  # python
+  - package-ecosystem: "pip"
+    directory: "/python/messaging-api"
+    schedule:
+      interval: "monthly"
+    groups:
+      minor-changes:
+        update-types:
+        - "minor"
+        - "patch"
+
+  # GitHub actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
