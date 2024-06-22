@@ -2,29 +2,7 @@ version: 2
 updates:
   # Spring Boot
   - package-ecosystem: maven
-    directory: "/java/spring-boot/messaging-api"
-    schedule:
-      interval: monthly
-    ignore:
-      - dependency-name: org.apache.maven:*
-    groups:
-      minor-changes:
-        update-types:
-        - "minor"
-        - "patch"
-  - package-ecosystem: maven
-    directory: "/java/spring-boot/preval"
-    schedule:
-      interval: monthly
-    ignore:
-      - dependency-name: org.apache.maven:*
-    groups:
-      minor-changes:
-        update-types:
-        - "minor"
-        - "patch"
-  - package-ecosystem: maven
-    directory: "/java/spring-boot/swiftref"
+    directory: "/java/spring-boot"
     schedule:
       interval: monthly
     ignore:

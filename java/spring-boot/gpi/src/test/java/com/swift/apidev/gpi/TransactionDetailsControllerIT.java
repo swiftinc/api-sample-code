@@ -1,6 +1,6 @@
-package com.swift.apidev.messaging;
+package com.swift.apidev.gpi;
 
-import com.swift.apidev.messaging.transactiondetails.oas.model.ReadPaymentTransactionDetailsResponse1;
+import com.swift.apidev.gpi.transactiondetails.oas.model.ReadPaymentTransactionDetailsResponse1;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

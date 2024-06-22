@@ -1,15 +1,15 @@
-package com.swift.apidev.messaging;
+package com.swift.apidev.gpi;
 
-import com.swift.apidev.messaging.cct.oas.model.ActiveCurrencyAndAmount;
-import com.swift.apidev.messaging.cct.oas.model.BusinessService12Code;
-import com.swift.apidev.messaging.cct.oas.model.ChargeBearerType3Code;
-import com.swift.apidev.messaging.cct.oas.model.ClearingSystemMemberIdentification3;
-import com.swift.apidev.messaging.cct.oas.model.FinancialInstitutionIdentification11Choice;
-import com.swift.apidev.messaging.cct.oas.model.PaymentScenario6Code;
-import com.swift.apidev.messaging.cct.oas.model.PaymentStatusReason10Code;
-import com.swift.apidev.messaging.cct.oas.model.PaymentStatusRequest2;
-import com.swift.apidev.messaging.cct.oas.model.SettlementMethod1Code;
-import com.swift.apidev.messaging.cct.oas.model.TransactionIndividualStatus5Code;
+import com.swift.apidev.gpi.cct.oas.model.ActiveCurrencyAndAmount;
+import com.swift.apidev.gpi.cct.oas.model.BusinessService12Code;
+import com.swift.apidev.gpi.cct.oas.model.ChargeBearerType3Code;
+import com.swift.apidev.gpi.cct.oas.model.ClearingSystemMemberIdentification3;
+import com.swift.apidev.gpi.cct.oas.model.FinancialInstitutionIdentification11Choice;
+import com.swift.apidev.gpi.cct.oas.model.PaymentScenario6Code;
+import com.swift.apidev.gpi.cct.oas.model.PaymentStatusReason10Code;
+import com.swift.apidev.gpi.cct.oas.model.PaymentStatusRequest2;
+import com.swift.apidev.gpi.cct.oas.model.SettlementMethod1Code;
+import com.swift.apidev.gpi.cct.oas.model.TransactionIndividualStatus5Code;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ class CustomerCreditTransferControllerIT {
         paymentStatusRequest.setInterbankSettlementAmount(interbankSettlementAmount);
         paymentStatusRequest.setChargeBearer(ChargeBearerType3Code.SHAR);
 
-        HttpEntity<PaymentStatusRequest2> entity = new HttpEntity<PaymentStatusRequest2>(paymentStatusRequest);
+        HttpEntity<PaymentStatusRequest2> entity = new HttpEntity(paymentStatusRequest);
         ResponseEntity<Void> response = restTemplate.exchange("/gpi/97ed4827-7b6f-4491-a06f-b548d5a7512d/status",
                 HttpMethod.PUT, entity, void.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());

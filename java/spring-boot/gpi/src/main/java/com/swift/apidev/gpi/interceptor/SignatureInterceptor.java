@@ -1,11 +1,11 @@
-package com.swift.apidev.messaging.interceptor;
+package com.swift.apidev.gpi.interceptor;
 
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
-import com.swift.apidev.messaging.jwt.JwtOperations;
+import com.swift.apidev.gpi.jwt.JwtOperations;
 import java.io.IOException;
 import java.util.Collections;
 

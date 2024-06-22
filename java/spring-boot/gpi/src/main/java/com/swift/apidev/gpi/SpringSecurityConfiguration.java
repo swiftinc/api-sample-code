@@ -1,4 +1,4 @@
-package com.swift.apidev.messaging;
+package com.swift.apidev.gpi;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

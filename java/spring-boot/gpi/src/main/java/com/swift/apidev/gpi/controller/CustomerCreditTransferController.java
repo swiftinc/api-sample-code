@@ -1,4 +1,4 @@
-package com.swift.apidev.messaging.controller;
+package com.swift.apidev.gpi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,9 +12,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
-import com.swift.apidev.messaging.cct.oas.ApiClient;
-import com.swift.apidev.messaging.cct.oas.api.StatusConfirmationsApi;
-import com.swift.apidev.messaging.cct.oas.model.PaymentStatusRequest2;
+import com.swift.apidev.gpi.cct.oas.ApiClient;
+import com.swift.apidev.gpi.cct.oas.api.StatusConfirmationsApi;
+import com.swift.apidev.gpi.cct.oas.model.PaymentStatusRequest2;
 
 @RestController
 @RequestMapping("/gpi")

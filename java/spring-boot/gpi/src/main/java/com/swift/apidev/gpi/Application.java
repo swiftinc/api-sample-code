@@ -1,4 +1,4 @@
-package com.swift.apidev.messaging;
+package com.swift.apidev.gpi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

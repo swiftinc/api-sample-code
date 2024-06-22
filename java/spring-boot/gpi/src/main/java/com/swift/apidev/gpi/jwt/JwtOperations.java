@@ -1,4 +1,4 @@
-package com.swift.apidev.messaging.jwt;
+package com.swift.apidev.gpi.jwt;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;

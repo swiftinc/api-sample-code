@@ -31,15 +31,6 @@ jobs:
           distribution: "temurin"
           java-version: ${{ matrix.java }}
           cache: "maven"
-      - name: Test Messaging API
-        working-directory: java/spring-boot/messaging-api
-        run: ./mvnw -B verify --file pom.xml
-      - name: Test Pre-Validation
-        working-directory: java/spring-boot/preval
-        run: ./mvnw -B verify --file pom.xml
-      - name: Test Swift gpi
-        working-directory: java/spring-boot/gpi
-        run: ./mvnw -B verify --file pom.xml
-      - name: Test SwiftRef
-        working-directory: java/spring-boot/swiftref
+      - name: Test
+        working-directory: java/spring-boot
         run: ./mvnw -B verify --file pom.xml

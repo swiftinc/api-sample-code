@@ -1,9 +1,9 @@
-package com.swift.apidev.messaging.configuration;
+package com.swift.apidev.gpi.configuration;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swift.apidev.messaging.interceptor.AuthorizationInterceptor;
-import com.swift.apidev.messaging.interceptor.SignatureInterceptor;
+import com.swift.apidev.gpi.interceptor.AuthorizationInterceptor;
+import com.swift.apidev.gpi.interceptor.SignatureInterceptor;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.boot.web.client.RestTemplateBuilder;

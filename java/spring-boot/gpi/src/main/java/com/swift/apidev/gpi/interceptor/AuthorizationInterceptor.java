@@ -1,4 +1,4 @@
-package com.swift.apidev.messaging.interceptor;
+package com.swift.apidev.gpi.interceptor;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;

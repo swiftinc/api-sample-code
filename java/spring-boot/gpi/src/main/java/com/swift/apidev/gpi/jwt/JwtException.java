@@ -1,4 +1,4 @@
-package com.swift.apidev.messaging.jwt;
+package com.swift.apidev.gpi.jwt;
 
 public class JwtException extends RuntimeException {
     public JwtException(Throwable t) {

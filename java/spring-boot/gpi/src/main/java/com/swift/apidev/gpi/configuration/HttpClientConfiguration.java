@@ -1,4 +1,4 @@
-package com.swift.apidev.messaging.configuration;
+package com.swift.apidev.gpi.configuration;
 
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
