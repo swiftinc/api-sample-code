@@ -36,7 +36,13 @@ class FinResourceIT {
         networkInfo.put("uetr", UUID.randomUUID().toString());
         networkInfo.put("delivery_monitoring", "NonDelivery");
 
-        given().contentType(ContentType.JSON).accept(ContentType.JSON).body(finMessage).when()
-                .post("/send").then().statusCode(200);
+        given()
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+            .body(finMessage)
+            .when()
+                .post("/send")
+            .then()
+                .statusCode(200);
     }
 }
