@@ -1,14 +1,13 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/java
 {
-	"name": "Java",
+	"name": "Quarkus",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/java:0-17",
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
 			"version": "none",
-			"installMaven": "true",
-			"mavenVersion": "3.8.6",
+			"installMaven": "false",
 			"installGradle": "false"
 		}
 	},
@@ -27,7 +26,8 @@
 				"streetsidesoftware.code-spell-checker",
 				"vscjava.vscode-java-pack",
 				"SonarSource.sonarlint-vscode",
-				"redhat.vscode-xml"
+				"redhat.vscode-xml",
+				"redhat.vscode-quarkus"
 			]
 		}
 	},
@@ -37,6 +37,6 @@
 	// "postCreateCommand": "java -version",
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
-	"workspaceMount": "source=${localWorkspaceFolder}/java,target=/workspace,type=bind",
+	"workspaceMount": "source=${localWorkspaceFolder}/java/quarkus,target=/workspace,type=bind",
 	"workspaceFolder": "/workspace"
 }
