@@ -4,39 +4,16 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.swift.apidev.preval</groupId>
+
+  <parent>
+    <groupId>com.swift.apidev</groupId>
+    <artifactId>quarkus-boot-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
   <artifactId>preval-quarkus</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-
-  <properties>
-    <compiler-plugin.version>3.12.1</compiler-plugin.version>
-    <maven.compiler.release>17</maven.compiler.release>
-    <openapi-generator-maven-plugin.version>7.3.0</openapi-generator-maven-plugin.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
-    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.8.1</quarkus.platform.version>
-    <jackson-databind-nullable-version>0.2.6</jackson-databind-nullable-version>
-    <jakarta.json.version>1.1.6</jakarta.json.version>
-    <jakarta.json.bind.version>1.0.2</jakarta.json.bind.version>
-    <skipITs>false</skipITs>
-    <surefire-plugin.version>3.2.5</surefire-plugin.version>
-    <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
-  </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>${quarkus.platform.artifact-id}</artifactId>
-        <version>${quarkus.platform.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -45,15 +22,15 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-oidc-client</artifactId>
+      <artifactId>quarkus-rest-client-oidc-filter</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-client</artifactId>
+      <artifactId>quarkus-rest-jsonb</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-jsonb</artifactId>
+      <artifactId>quarkus-rest-client-jsonb</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -80,7 +57,6 @@
       <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>${openapi-generator-maven-plugin.version}</version>
         <executions>
           <execution>
             <goals>
@@ -99,8 +75,8 @@
           <generateModelDocumentation>false</generateModelDocumentation>
           <generateModelTests>false</generateModelTests>
           <output>${project.build.directory}/generated-sources</output>
-          <modelPackage>${project.groupId}.oas.model</modelPackage>
-          <apiPackage>${project.groupId}.oas.api</apiPackage>
+          <modelPackage>${project.groupId}.preval.oas.model</modelPackage>
+          <apiPackage>${project.groupId}.preval.oas.api</apiPackage>
           <inputSpec>${project.basedir}/src/main/openapi/preval.yaml</inputSpec>
           <configOptions>
             <openApiNullable>false</openApiNullable>
@@ -114,7 +90,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>${build-helper-maven-plugin.version}</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
@@ -132,7 +107,6 @@
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
-        <version>${quarkus.platform.version}</version>
         <extensions>true</extensions>
         <executions>
           <execution>
@@ -146,7 +120,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${compiler-plugin.version}</version>
         <configuration>
           <compilerArgs>
             <arg>-parameters</arg>
@@ -155,7 +128,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
         <configuration>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
@@ -184,19 +156,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>native</id>
-      <activation>
-        <property>
-          <name>native</name>
-        </property>
-      </activation>
-      <properties>
-        <skipITs>false</skipITs>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
-    </profile>
-  </profiles>
 </project>
