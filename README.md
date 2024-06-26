@@ -43,14 +43,31 @@ To start the application:
 
 1. Navigate to the project subfolder, for example:
 
+   **Java**
    ```shell script
-     # cd language/framework/<project> 
+     # cd java/<framework>/<project> 
      cd java/spring-boot/messaging-api
    ```
-   or
+   
+   **Node.js**
+
    ```shell script
-     # cd language/<project> 
-     cd nodejs/messaging-api
+     # different projects launched by npm scripts
+     cd nodejs
+   ```
+
+   **.NET**
+
+   ```shell script
+     # cd dotnet/<project> 
+     cd dotnet/MessagingApi
+   ```
+
+   **Python**
+
+   ```shell script
+     # cd python/<project>  
+     cd python/messaging-api
    ```
 
 2. Launch the application
@@ -59,7 +76,7 @@ To start the application:
    | Spring Boot | `./mvnw spring-boot:run` |
    | Quarkus | `./mvnw quarkus:dev` |
    | .NET | `dotnet run` |
-   | NodeJS | `npm install && npm run dev` |
+   | NodeJS | `npm install` and `npm run swiftref` `npm run preval` `npm run messaging-api` |
    | Python | `python -m flask run --port 8080` |
 
 ## Testing
