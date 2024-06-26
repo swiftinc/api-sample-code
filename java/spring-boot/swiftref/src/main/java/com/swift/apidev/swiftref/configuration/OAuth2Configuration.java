@@ -41,8 +41,6 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public class OAuth2Configuration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OAuth2Configuration.class);
-
     @Bean
     OAuth2AuthorizedClientManager authorizedClientManager(
             ClientRegistrationRepository clientRegistrations,
@@ -53,16 +51,8 @@ public class OAuth2Configuration {
         var clientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
                 clientRegistrations, authorizedClientRepository);
         clientManager.setAuthorizedClientProvider(authorizedClientProvider);
-        // In case of error removed the authorized client
-        clientManager
-                .setAuthorizationFailureHandler((authorizationException, principal, attributes) -> {
-                    LOG.info(
-                            "Unable to refresh the token. '{}' authorized client removed from repository",
-                            principal.getName());
-                    authorizedClientRepository.removeAuthorizedClient(principal.getName(),
-                            principal.getName());
-                });
 
+        // username and password
         clientManager.setContextAttributesMapper(authorizeRequest -> {
             Map<String, Object> contextAttributes = new HashMap<>();
             contextAttributes.put(OAuth2AuthorizationContext.USERNAME_ATTRIBUTE_NAME, username);
