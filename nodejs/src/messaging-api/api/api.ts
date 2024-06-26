@@ -1,28 +1,12 @@
-import axios, { CreateAxiosDefaults } from 'axios';
 import { Configuration, DistributionsApi, FinApi } from './generated';
-import { getAccessToken } from '../../common/bearertoken';
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import { getSwiftCaFromFile } from '../../common/certificate';
-import https from 'https';
+import { getAccessToken } from '../../common/bearer-token';
 import swiftSignature from '../../common/signature';
+import defaultAxiosConfig from '../../common/axios-config';
+import axios from 'axios';
 
 const swiftSignatureHeader = 'X-SWIFT-Signature';
 
-const axiosConfig: CreateAxiosDefaults = {};
-
-// Set proxy
-if (process.env.PROXY) {
-  axiosConfig.httpsAgent = new HttpsProxyAgent(process.env.PROXY);
-} else {
-  axiosConfig.httpsAgent = new https.Agent();
-}
-
-// Set Swift Root CA
-if (process.env.SWIFT_CA) {
-  axiosConfig.httpsAgent.options = { ca: getSwiftCaFromFile() };
-}
-
-const axiosInstance = axios.create(axiosConfig);
+const axiosInstance = axios.create(defaultAxiosConfig);
 
 // Signature interceptor
 axiosInstance.interceptors.request.use(
@@ -34,7 +18,7 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (err) => {
-    console.error(err);
+    console.log(err);
     Promise.reject(err);
   }
 );

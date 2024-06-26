@@ -6,11 +6,9 @@ import {
   getX5c,
   getSubjectDnFromCertificate,
   base64UrlEncode,
-  getPrivateKeyFromFile,
-  getSwiftCaFromFile
-} from './certificate';
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import https from 'https';
+  getPrivateKeyFromFile
+} from './utils';
+import defaultAxiosConfig from './axios-config';
 
 type TokenHolder = {
   token_type: string;
@@ -43,7 +41,7 @@ export async function getAccessToken(): Promise<string> {
         error: 'invalid_request',
         error_description: (err as Error).message
       };
-      console.error(error);
+      console.log(error);
       throw new Error(JSON.stringify(error));
     }
   }
@@ -58,7 +56,8 @@ async function requestAccessToken(): Promise<TokenHolder> {
   };
 
   const axiosConfig: CreateAxiosDefaults = {
-    baseURL: process.env.URL,
+    ...defaultAxiosConfig,
+    baseURL: process.env.URL as string,
     auth: {
       username: process.env.CONSUMER_KEY as string,
       password: process.env.CONSUMER_SECRET as string
@@ -67,18 +66,6 @@ async function requestAccessToken(): Promise<TokenHolder> {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   };
-
-  // Set proxy to the axios OAuth client
-  if (process.env.PROXY) {
-    axiosConfig.httpsAgent = new HttpsProxyAgent(process.env.PROXY);
-  } else {
-    axiosConfig.httpsAgent = new https.Agent();
-  }
-
-  // Set Swift Root CA
-  if (process.env.SWIFT_CA) {
-    axiosConfig.httpsAgent.options = { ca: getSwiftCaFromFile() };
-  }
 
   const oauthClient = axios.create(axiosConfig);
   const res: AxiosResponse<TokenHolder> = await oauthClient.post<TokenHolder>(

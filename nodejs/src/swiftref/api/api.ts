@@ -1,39 +1,14 @@
-import axios, { CreateAxiosDefaults } from 'axios';
 import { Configuration, BicsApi, IbansApi } from './generated';
-import { getAccessToken } from '../../common/passwordtoken';
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import * as fs from 'fs';
-import https from 'https';
-
-const axiosConfig: CreateAxiosDefaults = {};
-
-// Set proxy
-if (process.env.PROXY) {
-  axiosConfig.httpsAgent = new HttpsProxyAgent(process.env.PROXY);
-} else {
-  axiosConfig.httpsAgent = new https.Agent();
-}
-
-// Set Swift Root CA
-if (process.env.SWIFT_CA) {
-  axiosConfig.httpsAgent.options = { ca: getSwiftCaFromFile() };
-}
-
-// Only Accept JSON
-axiosConfig.headers = {
-  Accept: 'application/json'
-};
-
-const axiosInstance = axios.create(axiosConfig);
+import { getAccessToken } from '../../common/password-token';
+import defaultAxiosConfig from '../../common/axios-config';
+import axios from 'axios';
 
 const configuration: Configuration = new Configuration({
   basePath: `${process.env.URL}${process.env.ENDPOINT}`,
   accessToken: getAccessToken // Can be also implemented using axiosInstance.interceptors.request.use
 });
 
-export function getSwiftCaFromFile(): Buffer {
-  return fs.readFileSync(process.env.SWIFT_CA as string);
-}
+const axiosInstance = axios.create(defaultAxiosConfig);
 
 export default {
   BicsApi: new BicsApi(configuration, undefined, axiosInstance),

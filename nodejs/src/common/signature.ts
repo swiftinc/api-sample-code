@@ -5,7 +5,7 @@ import {
   getPrivateKeyFromFile,
   getSubjectDnFromCertificate,
   getX5c
-} from './certificate';
+} from './utils';
 
 export default function swiftSignature(url: string, data: string): string {
   const certificate = getCertificateFromFile();

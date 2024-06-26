@@ -13,10 +13,6 @@ export function getCertificateFromFile(): Buffer {
   return fs.readFileSync(process.env.CERTIFICATE as string);
 }
 
-export function getSwiftCaFromFile(): Buffer {
-  return fs.readFileSync(process.env.SWIFT_CA as string);
-}
-
 export function getX5c(certificate: Buffer): string {
   return certificate
     .toString()
