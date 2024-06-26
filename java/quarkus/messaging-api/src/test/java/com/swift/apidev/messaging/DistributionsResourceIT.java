@@ -12,6 +12,10 @@ class DistributionsResourceIT {
 
     @Test
     void testDistributionList() {
-        given().when().get("/list").then().statusCode(200);
+        given()
+            .when()
+                .get("/list")
+            .then()
+                .statusCode(200);
     }
 }

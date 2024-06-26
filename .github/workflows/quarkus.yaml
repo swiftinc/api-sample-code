@@ -31,12 +31,6 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: "temurin"
           cache: "maven"
-      - name: Test Messaging API
-        working-directory: java/quarkus/messaging-api
-        run: ./mvnw -B verify -DskipITs=false --file pom.xml
-      - name: Test Pre-Validation
-        working-directory: java/quarkus/preval
-        run: ./mvnw -B verify -DskipITs=false --file pom.xml
-      - name: Test SwiftRef
-        working-directory: java/quarkus/swiftref
+      - name: Test
+        working-directory: java/quarkus
         run: ./mvnw -B verify -DskipITs=false --file pom.xml
