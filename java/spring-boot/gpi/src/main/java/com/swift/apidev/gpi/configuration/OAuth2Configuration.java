@@ -1,4 +1,4 @@
-package com.swift.apidev.messaging.configuration;
+package com.swift.apidev.gpi.configuration;
 
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorH
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 import org.springframework.util.MultiValueMap;
-import com.swift.apidev.messaging.jwt.JwtOperations;
+import com.swift.apidev.gpi.jwt.JwtOperations;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -46,6 +46,15 @@ public class OAuth2Configuration {
         var clientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
                 clientRegistrations, authorizedClientRepository);
         clientManager.setAuthorizedClientProvider(authorizedClientProvider);
+        // In case of error removed the authorized client
+        clientManager
+                .setAuthorizationFailureHandler((authorizationException, principal, attributes) -> {
+                    LOG.info(
+                            "Unable to refresh the token. '{}' authorized client removed from repository",
+                            principal.getName());
+                    authorizedClientRepository.removeAuthorizedClient(principal.getName(),
+                            principal.getName());
+                });
         return clientManager;
     }
 

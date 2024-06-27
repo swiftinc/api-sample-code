@@ -5,25 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <groupId>com.swift.apidev</groupId>
+        <artifactId>spring-boot-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.swift.apidev.messaging</groupId>
     <artifactId>messaging-api-spring-boot</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
-    <properties>
-        <java.version>17</java.version>
-        <openapi-generator-maven-plugin.version>7.3.0</openapi-generator-maven-plugin.version>
-        <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
-        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-        <springdoc.version>2.3.0</springdoc.version>
-        <java-json-canonicalization.version>1.1</java-json-canonicalization.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -46,12 +35,10 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.erdtman</groupId>
             <artifactId>java-json-canonicalization</artifactId>
-            <version>${java-json-canonicalization.version}</version>
         </dependency>
 
         <!-- Test -->
@@ -76,7 +63,6 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>${openapi-generator-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -99,8 +85,8 @@
                                 <useJakartaEe>true</useJakartaEe>
                                 <generateClientAsBean>false</generateClientAsBean>
                             </configOptions>
-                            <modelPackage>${project.groupId}.oas.model</modelPackage>
-                            <apiPackage>${project.groupId}.oas.api</apiPackage>
+                            <modelPackage>${project.groupId}.messaging.oas.model</modelPackage>
+                            <apiPackage>${project.groupId}.messaging.oas.api</apiPackage>
                             <inputSpec>
                                 ${project.basedir}/src/main/openapi/SWIFT-API-Swift-Messaging-1.1.0-resolved.yaml
                             </inputSpec>
@@ -111,7 +97,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${build-helper-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>add-generated-sources</id>

@@ -1,30 +1,14 @@
 version: 2
 updates:
+  # Devcontainers
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: monthly
+
   # Spring Boot
   - package-ecosystem: maven
-    directory: "/java/spring-boot/messaging-api"
-    schedule:
-      interval: monthly
-    ignore:
-      - dependency-name: org.apache.maven:*
-    groups:
-      minor-changes:
-        update-types:
-        - "minor"
-        - "patch"
-  - package-ecosystem: maven
-    directory: "/java/spring-boot/preval"
-    schedule:
-      interval: monthly
-    ignore:
-      - dependency-name: org.apache.maven:*
-    groups:
-      minor-changes:
-        update-types:
-        - "minor"
-        - "patch"
-  - package-ecosystem: maven
-    directory: "/java/spring-boot/swiftref"
+    directory: "/java/spring-boot"
     schedule:
       interval: monthly
     ignore:
@@ -37,29 +21,7 @@ updates:
 
   # Quarkus
   - package-ecosystem: maven
-    directory: "/java/quarkus/messaging-api"
-    schedule:
-      interval: monthly
-    ignore:
-      - dependency-name: org.apache.maven:*
-    groups:
-      minor-changes:
-        update-types:
-        - "minor"
-        - "patch"
-  - package-ecosystem: maven
-    directory: "/java/quarkus/preval"
-    schedule:
-      interval: monthly
-    ignore:
-      - dependency-name: org.apache.maven:*
-    groups:
-      minor-changes:
-        update-types:
-        - "minor"
-        - "patch"
-  - package-ecosystem: maven
-    directory: "/java/quarkus/swiftref"
+    directory: "/java/quarkus"
     schedule:
       interval: monthly
     ignore:
@@ -70,7 +32,7 @@ updates:
         - "minor"
         - "patch"
 
-  # nodejs
+  # Node.js
   - package-ecosystem: npm
     directory: "/nodejs/messaging-api"
     schedule:
