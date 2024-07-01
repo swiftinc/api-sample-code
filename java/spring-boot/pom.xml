@@ -21,7 +21,7 @@
         <openapi-generator-maven-plugin.version>7.6.0</openapi-generator-maven-plugin.version>
         <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-        <springdoc.version>2.5.0</springdoc.version>
+        <springdoc.version>2.6.0</springdoc.version>
         <java-json-canonicalization.version>1.1</java-json-canonicalization.version>
     </properties>
 
