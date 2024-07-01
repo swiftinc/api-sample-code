@@ -35,5 +35,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test
-        working-directory: nodejs/messaging-api
+        working-directory: nodejs
         run: npm install && npm run test
