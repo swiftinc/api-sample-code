@@ -34,12 +34,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Test Messaging API
-        working-directory: nodejs/messaging-api
-        run: npm install && npm run test
-      - name: Test Pre-Validation
-        working-directory: nodejs/preval
-        run: npm install && npm run test
-      - name: Test SwiftRef
-        working-directory: nodejs/swiftref
+      - name: Test
+        working-directory: nodejs
         run: npm install && npm run test
