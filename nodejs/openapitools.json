@@ -7,17 +7,17 @@
       "swiftref": {
         "generatorName": "typescript-axios",
         "output": "#{cwd}/src/swiftref/api/generated",
-        "glob": "openapi/SWIFT-API-swiftref_api-4.0.0-swagger.yaml"
+        "glob": "src/swiftref/api/SWIFT-API-swiftref_api-4.0.0-swagger.yaml"
       },
       "preval": {
         "generatorName": "typescript-axios",
         "output": "#{cwd}/src/preval/api/generated",
-        "glob": "openapi/SWIFT-API-payment-validation-2.4.1-resolved-2.yaml"
+        "glob": "src/preval/api/SWIFT-API-payment-validation-2.4.1-resolved-2.yaml"
       },
       "messaging-api": {
         "generatorName": "typescript-axios",
         "output": "#{cwd}/src/messaging-api/api/generated",
-        "glob": "openapi/SWIFT-API-Swift-Messaging-1.1.0-resolved.yaml"
+        "glob": "src/messaging-api/api/SWIFT-API-Swift-Messaging-2.0.0-swagger.yaml"
       }
     }
   }
