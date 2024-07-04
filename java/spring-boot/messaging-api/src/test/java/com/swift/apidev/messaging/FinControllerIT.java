@@ -44,7 +44,7 @@ class FinControllerIT {
         finMessageEmission.sender("ABCD1234XXXX");
         finMessageEmission.receiver("ABCD1234XXXX");
         finMessageEmission.setMessageType("fin.999");
-        finMessageEmission.setPayload(Base64.getEncoder().encode(":20:1234\r\n:79:Test".getBytes()));
+        finMessageEmission.setPayload(Base64.getEncoder().encode("\r\n:20:1234\r\n:79:Test".getBytes()));
 
         FinMessageNetworkInfoEmission networkInfo = new FinMessageNetworkInfoEmission();
         networkInfo.networkPriority(FinMessageNetworkInfoEmission.NetworkPriorityEnum.NORMAL);
