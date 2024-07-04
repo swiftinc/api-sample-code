@@ -4,6 +4,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import com.swift.apidev.messaging.jwt.JwtOperations;
 import java.io.IOException;
@@ -20,7 +21,8 @@ public class IntegritySignatureInterceptor implements ClientHttpRequestIntercept
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+    @NonNull
+    public ClientHttpResponse intercept(@NonNull HttpRequest request, @NonNull byte[] body, @NonNull ClientHttpRequestExecution execution)
             throws IOException {
         ClientHttpResponse response =  execution.execute(request, body);
 
