@@ -66,25 +66,7 @@ updates:
 
   # dotnet
   - package-ecosystem: "nuget"
-    directory: "/dotnet/MessagingApi"
-    schedule:
-      interval: "monthly"
-    groups:
-      minor-changes:
-        update-types:
-        - "minor"
-        - "patch"
-  - package-ecosystem: "nuget"
-    directory: "/dotnet/PreVal"
-    schedule:
-      interval: "monthly"
-    groups:
-      minor-changes:
-        update-types:
-        - "minor"
-        - "patch"
-  - package-ecosystem: "nuget"
-    directory: "/dotnet/SwiftRef"
+    directory: "/dotnet"
     schedule:
       interval: "monthly"
     groups:
