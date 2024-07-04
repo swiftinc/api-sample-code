@@ -18,7 +18,12 @@ class FinResourceIT {
 
     @Test
     void testDownloadFinMessage() {
-        given().when().get("/44984189500/download").then().statusCode(200);
+        given().when().get("/message/44984189500").then().statusCode(200);
+    }
+
+    @Test
+    void testDownloadFinTransmissionReport() {
+        given().when().get("/transmission-report/44984189500").then().statusCode(200);
     }
 
     @Test
@@ -29,7 +34,7 @@ class FinResourceIT {
         finMessage.put("receiver", "ABCD1234XXXX");
         finMessage.put("message_type", "fin.199");
         finMessage.put("payload",
-                Base64.getEncoder().encodeToString(":20:1234\r\n:79:Test".getBytes()));
+                Base64.getEncoder().encodeToString("\r\n:20:1234\r\n:79:Test".getBytes()));
 
         Map<String, String> networkInfo = new HashMap<String, String>();
         networkInfo.put("network_priority", "normal");
