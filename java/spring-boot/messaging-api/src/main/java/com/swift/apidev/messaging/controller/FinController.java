@@ -29,15 +29,23 @@ public class FinController {
     @Operation(summary = "Download FIN message",
             parameters = {@Parameter(name = "distributionId",
                     content = {@Content(examples = {@ExampleObject(value = "44984189500")})})})
-    @GetMapping(value = "/{distributionId}/download", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/message/{distributionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     FinMessageDownloadResponse downloadFinMessage(@PathVariable Long distributionId) {
         return finApi.downloadFinMessage(distributionId);
+    }
+
+    @Operation(summary = "Download FIN transmission report",
+            parameters = {@Parameter(name = "distributionId",
+                    content = {@Content(examples = {@ExampleObject(value = "44984189500")})})})
+    @GetMapping(value = "/transmission-report/{distributionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    FinTransmissionReportDownloadResponse downloadFinTransmissionReport(@PathVariable Long distributionId) {
+        return finApi.downloadFinTransmissionReport(distributionId);
     }
 
     @Operation(summary = "Send FIN message",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = {@Content(examples = {@ExampleObject(
-                            value = "{ \"sender_reference\": \"1234\", \"message_type\": \"fin.999\", \"sender\": \"ABCD1234XXXX\", \"receiver\": \"ABCD1234XXXX\", \"payload\": \"OjIwOjEyMzRcclxuOjc5OlRlc3Q=\", \"network_info\": { \"network_priority\": \"Normal\", \"uetr\": \"099d4eb3-3d68-45fa-9afd-30b19af48728\", \"delivery_monitoring\": \"NonDelivery\", \"possible_duplicate\": false }}")})}))
+                            value = "{ \"sender_reference\": \"1234\", \"message_type\": \"fin.999\", \"sender\": \"ABCD1234XXXX\", \"receiver\": \"ABCD1234XXXX\", \"payload\": \"DQo6MjA6MTIzNA0KOjc5OlRlc3Q=\", \"network_info\": { \"network_priority\": \"Normal\", \"uetr\": \"099d4eb3-3d68-45fa-9afd-30b19af48728\", \"delivery_monitoring\": \"NonDelivery\", \"possible_duplicate\": false }}")})}))
     @PostMapping(value = "/send", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     SendMessageResponse sendFinMessage(@RequestBody FinMessageEmission finMessageEmission) {

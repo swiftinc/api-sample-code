@@ -5,6 +5,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
@@ -24,7 +25,8 @@ public class AuthorizationInterceptor implements ClientHttpRequestInterceptor {
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+    public @NonNull ClientHttpResponse intercept(@NonNull HttpRequest request, @NonNull byte[] body,
+            @NonNull ClientHttpRequestExecution execution)
             throws IOException {
         // Attempt to authorize or re-authorize (if required)
         var authorizeRequest = OAuth2AuthorizeRequest.withClientRegistrationId("swift")
