@@ -31,8 +31,9 @@ class FinControllerIT {
 
     @Test
     void testDownloadFinTransmissionReport() {
-        ResponseEntity<FinTransmissionReportDownloadResponse> response = restTemplate.getForEntity("/fin/transmission-report/44984189500",
-        FinTransmissionReportDownloadResponse.class);
+        ResponseEntity<FinTransmissionReportDownloadResponse> response = restTemplate.getForEntity(
+                "/fin/transmission-report/44984189500",
+                FinTransmissionReportDownloadResponse.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.hasBody());
     }
@@ -50,7 +51,7 @@ class FinControllerIT {
         networkInfo.networkPriority(FinMessageNetworkInfoEmission.NetworkPriorityEnum.NORMAL);
         networkInfo.setUetr(UUID.randomUUID());
         networkInfo.deliveryMonitoring(
-                FinMessageNetworkInfoEmission.DeliveryMonitoringEnum.NONDELIVERY);
+                FinMessageNetworkInfoEmission.DeliveryMonitoringEnum.NON_DELIVERY);
         networkInfo.possibleDuplicate(false);
         finMessageEmission.setNetworkInfo(networkInfo);
 
