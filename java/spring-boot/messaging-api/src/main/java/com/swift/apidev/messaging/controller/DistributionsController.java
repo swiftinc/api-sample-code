@@ -4,6 +4,10 @@ import com.swift.apidev.messaging.oas.api.DistributionsApi;
 import com.swift.apidev.messaging.oas.ApiClient;
 import com.swift.apidev.messaging.oas.model.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +32,15 @@ public class DistributionsController {
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     ListDistributionsResponse distributions() {
         return distributionsApi.listDistributions(100, 0);
+    }
+
+    @Operation(summary = "Nack distribution", parameters = { @Parameter(name = "distributionId", content = {
+            @Content(examples = { @ExampleObject(value = "732489498") }) }) })
+    @PostMapping(value = "/{distributionId}/nak")
+    void ackDistribution(@PathVariable("distributionId") Long distributionId) {
+        Nak nak = new Nak();
+        nak.setReason("Testing Swift API sample code");
+        distributionsApi.nakDistribution(distributionId, nak);
     }
 
     @ExceptionHandler(value = HttpClientErrorException.class)
