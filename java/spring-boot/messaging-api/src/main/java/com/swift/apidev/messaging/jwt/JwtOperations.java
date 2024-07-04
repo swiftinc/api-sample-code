@@ -35,7 +35,7 @@ import java.security.cert.CertPathValidator;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.security.cert.PKIXCertPathBuilderResult;
+import java.security.cert.PKIXCertPathValidatorResult;
 import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
@@ -208,7 +208,7 @@ public class JwtOperations {
             pkixParameters.setDate(now);
 
             CertPathValidator certPathValidator = CertPathValidator.getInstance("PKIX");
-            PKIXCertPathBuilderResult result = (PKIXCertPathBuilderResult) certPathValidator.validate(certPath,
+            PKIXCertPathValidatorResult result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath,
                     pkixParameters);
 
             final TrustAnchor trustAnchor = result.getTrustAnchor();

@@ -4,6 +4,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import com.swift.apidev.gpi.jwt.JwtOperations;
 import java.io.IOException;
@@ -21,7 +22,8 @@ public class SignatureInterceptor implements ClientHttpRequestInterceptor {
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+    public @NonNull ClientHttpResponse intercept(@NonNull HttpRequest request, @NonNull byte[] body,
+            @NonNull ClientHttpRequestExecution execution)
             throws IOException {
         // Calculate the signature for requests that contain the signature header
         if (request.getHeaders().containsKey(SIGNATURE_HEADER)) {
