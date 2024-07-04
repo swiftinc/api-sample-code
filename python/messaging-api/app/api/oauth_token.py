@@ -64,7 +64,7 @@ class OAuthToken:
             if response.ok:
                 self.bearer_token = response.json()["access_token"]
                 # Clock skew of 10 secs
-                self.bearer_token_expires_in = get_timestamp() + int(response.json()["expires_in"]) * 1000 - 10000
+                self.bearer_token_expires_in = get_timestamp() + int(response.json()["expires_in"]) - 10
             else:
                 raise RuntimeError(str(response.json()))
 

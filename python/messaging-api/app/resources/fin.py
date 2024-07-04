@@ -43,7 +43,7 @@ class Fin(Resource):
                 type: object
         """
         payload = json.dumps({"sender_reference": "1234", "message_type": "fin.999", "sender": "ABCD1234XXXX",
-                              "receiver": "ABCD1234XXXX", "payload": "OjIwOjEyMzRcclxuOjc5OlRlc3Q=",
+                              "receiver": "ABCD1234XXXX", "payload": "DQo6MjA6MTIzNA0KOjc5OlRlc3Q=",
                               "network_info": {"network_priority": "Normal",
                                                "uetr": "099d4eb3-3d68-45fa-9afd-30b19af48728",
                                                "delivery_monitoring": "NonDelivery", "possible_duplicate": False}},
