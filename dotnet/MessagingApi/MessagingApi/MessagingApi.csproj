@@ -17,7 +17,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
   <ItemGroup>
-    <OpenApiReference Include=".\SWIFT-API-Swift-Messaging-1.1.0-resolved.yaml">
+    <OpenApiReference Include=".\SWIFT-API-Swift-Messaging-2.0.0-swagger.yaml">
       <Namespace>MessagingApi.Generated</Namespace>
       <ClassName>MessagingApiClient</ClassName>
       <OutputPath>MessagingApiClient.cs</OutputPath>

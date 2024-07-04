@@ -45,7 +45,7 @@ public class IntegrationTest
             Sender = "ABCD1234XXXX",
             Receiver = "ABCD1234XXXX",
             Message_type = "fin.199",
-            Payload = Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(":20:1234\r\n:79:Test"))),
+            Payload = Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes("\r\n:20:1234\r\n:79:Test"))),
             Network_info = finMessageNetworkInfoEmission
         };
         
