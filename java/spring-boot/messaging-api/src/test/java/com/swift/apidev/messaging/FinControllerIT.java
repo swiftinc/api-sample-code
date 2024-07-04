@@ -3,6 +3,7 @@ package com.swift.apidev.messaging;
 import com.swift.apidev.messaging.oas.model.FinMessageDownloadResponse;
 import com.swift.apidev.messaging.oas.model.FinMessageEmission;
 import com.swift.apidev.messaging.oas.model.FinMessageNetworkInfoEmission;
+import com.swift.apidev.messaging.oas.model.FinTransmissionReportDownloadResponse;
 import com.swift.apidev.messaging.oas.model.SendMessageResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,16 @@ class FinControllerIT {
 
     @Test
     void testDownloadFinMessage() {
-        ResponseEntity<FinMessageDownloadResponse> response = restTemplate.getForEntity("/fin/44984189500/download",
+        ResponseEntity<FinMessageDownloadResponse> response = restTemplate.getForEntity("/fin/message/44984189500",
                 FinMessageDownloadResponse.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.hasBody());
+    }
+
+    @Test
+    void testDownloadFinTransmissionReport() {
+        ResponseEntity<FinTransmissionReportDownloadResponse> response = restTemplate.getForEntity("/fin/transmission-report/44984189500",
+        FinTransmissionReportDownloadResponse.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.hasBody());
     }
@@ -35,7 +44,7 @@ class FinControllerIT {
         finMessageEmission.sender("ABCD1234XXXX");
         finMessageEmission.receiver("ABCD1234XXXX");
         finMessageEmission.setMessageType("fin.999");
-        finMessageEmission.setPayload(Base64.getEncoder().encode(":20:1234\r\n:79:Test".getBytes()));
+        finMessageEmission.setPayload(Base64.getEncoder().encode("\r\n:20:1234\r\n:79:Test".getBytes()));
 
         FinMessageNetworkInfoEmission networkInfo = new FinMessageNetworkInfoEmission();
         networkInfo.networkPriority(FinMessageNetworkInfoEmission.NetworkPriorityEnum.NORMAL);

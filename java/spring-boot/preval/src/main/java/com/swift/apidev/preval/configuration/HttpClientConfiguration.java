@@ -29,22 +29,23 @@ public class HttpClientConfiguration {
 
     final String proxyPort;
 
-    public HttpClientConfiguration(@Value("${swift.proxy.host:}") String proxyHost, @Value("${swift.proxy.port:}") String proxyPort) {
+    public HttpClientConfiguration(@Value("${swift.proxy.host:}") String proxyHost,
+            @Value("${swift.proxy.port:}") String proxyPort) {
         this.proxyHost = proxyHost;
         this.proxyPort = proxyPort;
     }
 
     @Bean
     CloseableHttpClient httpClient(SslBundles sslBundles) {
-        PoolingHttpClientConnectionManagerBuilder cmBuilder =
-                PoolingHttpClientConnectionManagerBuilder.create();
+        PoolingHttpClientConnectionManagerBuilder cmBuilder = PoolingHttpClientConnectionManagerBuilder.create();
 
         try {
-            // Before deploying to production, set Swift Root CA to create a SSLContext with Swift Root CA
+            // Before deploying to production, set Swift Root CA to create a SSLContext with
+            // Swift Root CA
             SslBundle clientSslBundle = sslBundles.getBundle("client");
             final SSLContext sslContext = clientSslBundle.createSslContext();
-            final SSLConnectionSocketFactory sslSocketFactory =
-                    SSLConnectionSocketFactoryBuilder.create().setSslContext(sslContext).build();
+            final SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder.create()
+                    .setSslContext(sslContext).build();
             cmBuilder.setSSLSocketFactory(sslSocketFactory);
         } catch (NoSuchSslBundleException e) {
             LOG.warn(

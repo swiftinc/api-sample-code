@@ -26,16 +26,25 @@ public class FinResource {
     FinApi finApi;
 
     @GET
-    @Path("/{distributionId}/download")
+    @Path("/message/{distributionId}")
     @Operation(summary = "Download FIN message")
     @Produces(MediaType.APPLICATION_JSON)
     public Response downloadFinMessage(
-            @Parameter(required = true, example = "44984189500", schema = @Schema(
-                    type = SchemaType.STRING)) @PathParam("distributionId") Long distributionId)
+            @Parameter(required = true, example = "44984189500", schema = @Schema(type = SchemaType.STRING)) @PathParam("distributionId") Long distributionId)
             throws ApiException {
-        FinMessageDownloadResponse finMessageDownloadResponse =
-                finApi.downloadFinMessage(distributionId);
+        FinMessageDownloadResponse finMessageDownloadResponse = finApi.downloadFinMessage(distributionId);
         return Response.ok(finMessageDownloadResponse).build();
+    }
+
+    @GET
+    @Path("/transmission-report/{distributionId}")
+    @Operation(summary = "Download FIN message")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response downloadFinTransmissionReport(
+            @Parameter(required = true, example = "44984189500", schema = @Schema(type = SchemaType.STRING)) @PathParam("distributionId") Long distributionId)
+            throws ApiException {
+        FinTransmissionReportDownloadResponse response = finApi.downloadFinTransmissionReport(distributionId);
+        return Response.ok(response).build();
     }
 
     @POST
@@ -43,9 +52,8 @@ public class FinResource {
     @Operation(summary = "Send FIN message")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response findSend(@RequestBody(required = true, content = {@Content(
-            schema = @Schema(implementation = FinMessageEmission.class),
-            example = "{\"sender_reference\": \"1234\", \"message_type\": \"fin.999\", \"sender\": \"ABCD1234XXXX\", \"receiver\": \"ABCD1234XXXX\", \"payload\": \"OjIwOjEyMzRcclxuOjc5OlRlc3Q=\", \"network_info\": { \"network_priority\": \"Normal\", \"uetr\": \"099d4eb3-3d68-45fa-9afd-30b19af48728\", \"delivery_monitoring\": \"NonDelivery\", \"possible_duplicate\": false }}")}) FinMessageEmission finMessageEmission)
+    public Response findSend(@RequestBody(required = true, content = {
+            @Content(schema = @Schema(implementation = FinMessageEmission.class), example = "{\"sender_reference\": \"1234\", \"message_type\": \"fin.999\", \"sender\": \"ABCD1234XXXX\", \"receiver\": \"ABCD1234XXXX\", \"payload\": \"DQo6MjA6MTIzNA0KOjc5OlRlc3Q=\", \"network_info\": { \"network_priority\": \"Normal\", \"uetr\": \"099d4eb3-3d68-45fa-9afd-30b19af48728\", \"delivery_monitoring\": \"NonDelivery\", \"possible_duplicate\": false }}") }) FinMessageEmission finMessageEmission)
             throws ApiException {
         SendMessageResponse finMessage = finApi.sendFinMessage("", finMessageEmission);
         return Response.ok().entity(finMessage).build();

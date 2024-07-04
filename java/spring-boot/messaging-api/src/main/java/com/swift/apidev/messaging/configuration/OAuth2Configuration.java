@@ -1,8 +1,6 @@
 package com.swift.apidev.messaging.configuration;
 
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.endpoint.DefaultJwtBearerTokenResponseClient;
@@ -35,8 +34,6 @@ import java.util.Arrays;
  */
 @Configuration
 public class OAuth2Configuration {
-
-    private static final Logger LOG = LoggerFactory.getLogger(OAuth2Configuration.class);
 
     @Bean
     OAuth2AuthorizedClientManager authorizedClientManager(
@@ -67,9 +64,8 @@ public class OAuth2Configuration {
         // Override the content type to not send the charset parameter
         var formHttpMessageConverter = new FormHttpMessageConverter() {
             @Override
-            public void write(MultiValueMap<String, ?> map, @Nullable MediaType contentType,
-                    HttpOutputMessage outputMessage)
-                    throws IOException, HttpMessageNotWritableException {
+            public void write(@NonNull MultiValueMap<String, ?> map, @Nullable MediaType contentType,
+                    @NonNull HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
                 super.write(map, contentType, outputMessage);
                 outputMessage.getHeaders().setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             }
