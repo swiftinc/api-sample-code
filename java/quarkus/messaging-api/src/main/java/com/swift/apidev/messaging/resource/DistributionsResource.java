@@ -36,7 +36,7 @@ public class DistributionsResource {
             @Parameter(required = true, example = "44984189500", schema = @Schema(type = SchemaType.STRING)) @PathParam("distributionId") Long distributionId)
             throws ApiException {
         Nak nak = new Nak();
-        nak.setReason("");
+        nak.setReason("API sample code test");
         distributionsApi.nakDistribution(distributionId, nak);
         return Response.noContent().build();
     }
