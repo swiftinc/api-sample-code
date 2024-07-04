@@ -88,7 +88,7 @@
                             <modelPackage>${project.groupId}.messaging.oas.model</modelPackage>
                             <apiPackage>${project.groupId}.messaging.oas.api</apiPackage>
                             <inputSpec>
-                                ${project.basedir}/src/main/openapi/SWIFT-API-Swift-Messaging-1.1.0-resolved.yaml
+                                ${project.basedir}/src/main/openapi/SWIFT-API-Swift-Messaging-2.0.0-swagger.yaml
                             </inputSpec>
                         </configuration>
                     </execution>

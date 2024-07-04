@@ -1,6 +1,6 @@
 swift:
   base-url: https://sandbox.swift.com
-  endpoint: ${swift.base-url}/alliancecloud/v1
+  endpoint: ${swift.base-url}/alliancecloud/v2
   # Proxy settings, uncomment to enable proxy
   #proxy:
   #  host: myproxy.corp
