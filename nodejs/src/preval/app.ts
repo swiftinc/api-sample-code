@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 import express from 'express';
 import preval from './routes/preval';
 
