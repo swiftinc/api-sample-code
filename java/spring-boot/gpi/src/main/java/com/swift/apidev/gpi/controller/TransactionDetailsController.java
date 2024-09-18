@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.swift.apidev.gpi.transactiondetails.oas.ApiClient;
 import com.swift.apidev.gpi.transactiondetails.oas.api.GetPaymentTransactionDetailsApi;
-import com.swift.apidev.gpi.transactiondetails.oas.model.ReadPaymentTransactionDetailsResponse1;
+import com.swift.apidev.gpi.transactiondetails.oas.model.PaymentTransaction149;
 
 @RestController
 @RequestMapping("/gpi")
@@ -33,7 +33,7 @@ public class TransactionDetailsController {
         @Parameter(name = "uetr", content = { @Content(examples = {
                 @ExampleObject(value = "97ed4827-7b6f-4491-a06f-b548d5a7512d") })})})
     @GetMapping(value = "/{uetr}/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
-    ReadPaymentTransactionDetailsResponse1 distributions(@PathVariable String uetr) {
+    PaymentTransaction149 distributions(@PathVariable String uetr) {
         return getPaymentTransactionDetailsApi.getPaymentTransactionDetails(uetr);
     }
 
