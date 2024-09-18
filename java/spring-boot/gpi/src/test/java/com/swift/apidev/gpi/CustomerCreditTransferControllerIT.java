@@ -1,16 +1,5 @@
 package com.swift.apidev.gpi;
 
-import com.swift.apidev.gpi.cct.oas.model.ActiveCurrencyAndAmount;
-import com.swift.apidev.gpi.cct.oas.model.BusinessService12Code;
-import com.swift.apidev.gpi.cct.oas.model.ChargeBearerType3Code;
-import com.swift.apidev.gpi.cct.oas.model.ClearingSystemMemberIdentification3;
-import com.swift.apidev.gpi.cct.oas.model.FinancialInstitutionIdentification11Choice;
-import com.swift.apidev.gpi.cct.oas.model.PaymentScenario6Code;
-import com.swift.apidev.gpi.cct.oas.model.PaymentStatusReason10Code;
-import com.swift.apidev.gpi.cct.oas.model.PaymentStatusRequest2;
-import com.swift.apidev.gpi.cct.oas.model.SettlementMethod1Code;
-import com.swift.apidev.gpi.cct.oas.model.TransactionIndividualStatus5Code;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,31 +15,43 @@ class CustomerCreditTransferControllerIT {
 
     @Test
     void testStatusUpdateRequest() {
-        PaymentStatusRequest2 paymentStatusRequest = new PaymentStatusRequest2();
-        paymentStatusRequest.setFrom("SWHQBEBBXXX");
-        paymentStatusRequest.setTransactionStatus(TransactionIndividualStatus5Code.ACSP);
-        paymentStatusRequest.setTransactionStatusDate("2021-11-25T14:50:00.000Z");
-        paymentStatusRequest.setTransactionStatusReason(PaymentStatusReason10Code.G000);
-        paymentStatusRequest.setTrackerInformingParty("SWHQBEBBXXX");
-        paymentStatusRequest.setInstructionIdentification("567");
-        paymentStatusRequest.setServiceLevel(BusinessService12Code.G001);
-        paymentStatusRequest.setPaymentScenario(PaymentScenario6Code.CCTR);
-        paymentStatusRequest.setSettlementMethod(SettlementMethod1Code.CLRG);
-        paymentStatusRequest.setClearingSystem("FDW");
-        ClearingSystemMemberIdentification3 clearingSystemMemberIdentification = new ClearingSystemMemberIdentification3();
-        clearingSystemMemberIdentification.setClearingSystemIdentification("USABA");
-        clearingSystemMemberIdentification.setMemberIdentification("'123456789'");
-        FinancialInstitutionIdentification11Choice instructedAgent = new FinancialInstitutionIdentification11Choice();
-        instructedAgent.setClearingSystemMemberIdentification(clearingSystemMemberIdentification);
-        paymentStatusRequest.setInstructedAgent(instructedAgent);
-        ActiveCurrencyAndAmount interbankSettlementAmount = new ActiveCurrencyAndAmount();
-        interbankSettlementAmount.setCurrency("USD");
-        interbankSettlementAmount.setAmount("1000");
-        paymentStatusRequest.setInterbankSettlementAmount(interbankSettlementAmount);
-        paymentStatusRequest.setChargeBearer(ChargeBearerType3Code.SHAR);
+        final String json = """
+                  {
+                        "from": "BICAXXXXXXX",
+                        "transaction_status": "ACSP",
+                        "transaction_status_date": "2021-11-25T14:33:00.000Z",
+                        "transaction_status_reason": "G000",
+                        "tracker_informing_party": "BICAXXXXXXX",
+                        "instruction_identification": " 123",
+                        "service_level": "G001",
+                        "payment_scenario": "CCTR",
+                        "settlement_method": "INDA",
+                        "instructed_agent": {
+                          "bicfi": "SWHQBEBB"
+                        },
+                        "interbank_settlement_amount": {
+                          "currency": "EUR",
+                          "amount": "990"
+                        },
+                        "charge_bearer": "CRED",
+                        "charges_information": [
+                          {
+                            "amount": {
+                              "currency": "EUR",
+                              "amount": "10"
+                            },
+                            "agent": {
+                              "bicfi": "BICAXXXXXXX"
+                            }
+                          }
+                        ]
+                      }
+                """;
 
-        HttpEntity<PaymentStatusRequest2> entity = new HttpEntity(paymentStatusRequest);
-        ResponseEntity<Void> response = restTemplate.exchange("/gpi/97ed4827-7b6f-4491-a06f-b548d5a7512d/status",
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<String> entity = new HttpEntity<>(json, headers);
+        ResponseEntity<Void> response = restTemplate.exchange("/gpi/b86979f0-ad83-45a1-bd1d-8696f6010b0d/status",
                 HttpMethod.PUT, entity, void.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }

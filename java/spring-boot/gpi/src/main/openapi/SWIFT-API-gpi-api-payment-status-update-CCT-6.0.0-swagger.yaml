@@ -1,0 +1,738 @@
+openapi: 3.0.2
+info:
+  title: gpi API Payment Status CCT
+  description: "About this document \n\n These technical specifications provide information about how to use APIs to access and update the Payment transaction information, it also gives the necessary information to assess the business API..\n\nThis document is for the following audience:\n\n* Business analysts to understand the functionality of the API\n\n* Business architects to understand the functionality of the API and how to integrate the use of the API within their organisation\n\n* Software developers of applications using the API to assess the complexity of the API\n\n*v6.0.0 Release Notes*\n\n* Instruction Identification field definition updated\n* Payment Scenario field definition updated\n* ExternalPaymentStatusReason3Code replaced by TrackerPaymentStatusReason3Code\n* All interations of OneOf were corrected\n* Return scenario examples added\n* FinancialInstitutionIdentification11Choice renamed into FinancialInstitutionIdentification12Choice"
+  contact:
+    name: Standards & Developer Hub
+    url: https://developer.swift.com
+    email: developer-support@swift.com
+  license:
+    name: API Restricted License
+    url: https://www.swift.com/file/56776/download?token=8w8DC4eF
+  version: 6.0.0
+servers:
+  - description: Test environment
+    url: https://api-test.swiftnet.sipn.swift.com/swift-apitracker-gcct-pilot/v6
+  - description: Production environment
+    url: https://api.swiftnet.sipn.swift.com/swift-apitracker-gcct/v6
+  - description: Sandbox environment
+    url: https://sandbox.swift.com/swift-apitracker-gcct/v6  
+tags:
+- name: Status Confirmations
+  description:  |
+      Payment Transactions - Updating the Status of a gCCT Payment Transaction
+paths:
+  /payments/{uetr}/status:
+    put:
+      tags:
+      - Status Confirmations
+      summary: Status Confirmations.
+      description: This API is a status confirmation update to inform the tracker about the updated status of a given payment
+      operationId: statusConfirmations
+      parameters:
+      - name: uetr
+        in: path
+        description: 'Identifies the payment transaction resource, events linked to this uetr will be retrieved'
+        schema:
+          $ref: '#/components/schemas/UUIDv4Identifier'
+        required: true
+        example: 97ed4827-7b6f-4491-a06f-b548d5a7512d
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentStatusRequest9'   
+            examples:
+              ACCC_partial_confirmation: 
+                $ref: '#/components/examples/ACCC_partial_confirmation'
+              ACSP_G000_charge_agent_NOTPROVIDED: 
+                $ref: '#/components/examples/ACSP_G000_charge_agent_NOTPROVIDED'
+              ACSP_G000_regular: 
+                $ref: '#/components/examples/ACSP_G000_regular'
+              ACSP_G000_with_clearingsystemmemberidentification: 
+                $ref: '#/components/examples/ACSP_G000_with_clearingsystemmemberidentification'  
+              ACCC_return_transaction: 
+                $ref: '#/components/examples/ACCC_return_transaction'
+              ACSP_G000_return_regular: 
+                $ref: '#/components/examples/ACSP_G000_return_regular'
+              ACSP_G000_with_FX: 
+                $ref: '#/components/examples/ACSP_G000_with_FX'                
+                
+                
+      responses:
+        '200':
+          $ref: '#/components/responses/200-PaymentStatus'
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        '413':
+          $ref: '#/components/responses/413-PayloadTooLarge'
+        '429':
+          $ref: '#/components/responses/429-TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500-InternalServerError'
+        '503':
+          $ref: '#/components/responses/503-ServerUnavailable'
+        '504':
+          $ref: '#/components/responses/504-GatewayTimeout'
+        default:
+          $ref: '#/components/responses/500-InternalServerError'
+components:
+  schemas:
+    ErrorMessage:
+      type: object
+      required: 
+        - code
+        - severity
+        - text
+      properties:
+        severity:
+          type: string
+          enum:
+             - Fatal
+             - Transient
+             - Logic
+        code:
+          type: string
+        text:
+          type: string
+        user_message:
+          type: string
+        more_info:
+          type: string
+          format: uri
+    ActiveCurrencyAndAmount:
+      type: object
+      description: A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
+      additionalProperties: false
+      properties:
+        currency:
+          $ref: '#/components/schemas/ActiveCurrencyCode'
+        amount:
+          type: string
+          maxLength: 19
+          pattern: ^0*(([0-9]{0,13}\.[0-9]{1,5})|([0-9]{0,14}\.[0-9]{1,4})|([0-9]{0,15}\.[0-9]{1,3})|([0-9]{0,16}\.[0-9]{1,2})|([0-9]{0,17}\.[0-9]{1,1})|([0-9]{0,18}\.)|0*|([0-9]{0,18}))$
+      required:
+      - currency
+      - amount
+    ActiveCurrencyCode:
+      type: string
+      pattern: ^[A-Z]{3,3}$
+      description: A code allocated to a currency by a Maintenance Agency under an international identification scheme as described in the latest edition of the international standard ISO 4217 "Codes for the representation of currencies and funds".
+    BICFIDec2014Identifier:
+      type: string
+      description: 'Code allocated to a financial institution by the ISO 9362 Registration Authority as described in ISO 9362: 2014 - "Banking - Banking telecommunication messages - Business identifier code (BIC)".'
+      pattern: ^[A-Z0-9]{4,4}[A-Z]{2,2}[A-Z0-9]{2,2}([A-Z0-9]{3,3}){0,1}$
+    BaseOneRate:
+      type: string
+      description: Rate expressed as a decimal, for example, 0.7 is 7/10 and 70%.
+      maxLength: 12
+    BranchAndFinancialInstitutionIdentification1Choice:
+      type: object
+      description: Unique and unambiguous identification of a financial institution or a branch of a financial institution.
+      additionalProperties: true
+      oneOf:
+      - type: object
+        additionalProperties: false
+        properties:
+          bicfi:
+            #  Code allocated to a financial institution by the ISO 9362 Registration Authority as described in ISO 9362 "Banking - Banking telecommunication messages - Business identifier code (BIC)".
+            $ref: '#/components/schemas/BICFIDec2014Identifier'
+        required:
+        - bicfi
+      - type: object
+        additionalProperties: false
+        properties:
+          name:
+            #  'Name by which an agent is known and which is usually used to identify that agent.  Usage rule: by default ''Name'', if present, will include the fixed value ''NOTPROVIDED''.'
+            $ref: '#/components/schemas/Max140Text'
+        required:
+        - name
+    BusinessService12Code:
+      type: string
+      description: |-
+        Specifies the Service Level agreed between the two MessagingEndpoints under which rules this Business Message is exchanged.
+        *`G001`-Indicates the gpi Customer Credit Transfer (CCT) service.
+      enum:
+      - G001
+    ChargeBearerType3Code:
+      type: string
+      description: |-
+        Specifies which party/parties will bear the charges associated with the processing of the payment transaction.
+        *`SHAR`-In a credit transfer context, means that transaction charges on the sender side are to be borne by the debtor, transaction charges on the receiver side are to be borne by the creditor. In a direct debit context, means that transaction charges on the sender side are to be borne by the creditor, transaction charges on the receiver side are to be borne by the debtor.
+        *`DEBT`-All transaction charges are to be borne by the debtor.
+        *`CRED`-All transaction charges are to be borne by the creditor.
+      enum:
+      - SHAR
+      - DEBT
+      - CRED
+    Charges15:
+      type: object
+      description: Provides information on the charges related to the payment transaction.
+      additionalProperties: false
+      properties:
+        amount:
+          #  Transaction charges to be paid by the charge bearer.
+          $ref: '#/components/schemas/ActiveCurrencyAndAmount'
+        agent:
+          #  'Agent that takes the transaction charges or to which the transaction charges are due.  '
+          $ref: '#/components/schemas/BranchAndFinancialInstitutionIdentification1Choice'
+      required:
+      - amount
+      - agent
+    ClearingSystemMemberIdentification3:
+      type: object
+      description: Unique identification, as assigned by a clearing system, to unambiguously identify a member of the clearing system.
+      additionalProperties: false
+      properties:
+        clearing_system_identification:
+          #  Specification of a pre-agreed offering between clearing agents or the channel through which the payment instruction is processed.
+          $ref: '#/components/schemas/ExternalClearingSystemIdentification1Code'
+        member_identification:
+          #  Identification of a member of a clearing system.
+          $ref: '#/components/schemas/RestrictedFINXMax28Text'
+      required:
+      - clearing_system_identification
+      - member_identification
+    ExternalCashClearingSystem1Code:
+      type: string
+      minLength: 1
+      maxLength: 3
+      description: "Specifies the cash clearing system, as published in an external cash clearing system code list.\r\nExternal code sets can be downloaded from www.iso20022.org."
+    ExternalClearingSystemIdentification1Code:
+      type: string
+      minLength: 1
+      maxLength: 5
+      description: "Specifies the clearing system identification code, as published in an external clearing system identification code list.\r\nExternal code sets can be downloaded from www.iso20022.org."
+    TrackerPaymentStatusReason3Code:
+      type: string
+      description: "Provides reason for reject/return.\n*`AM06`-Below limit.\n*`RC01`-Bank identifier code specified in the message has an incorrect format (formerly IncorrectFormatForRoutingCode).\n*`AC06`-Account specified is blocked, prohibiting posting of transactions against it.\n*`AM07`-Amount specified in message has been blocked by regulatory authorities.\n*`AC04`-Account number specified has been closed on the bank of account's books.\n*`AC07`-Creditor account number closed.\n*`G004`-Credit to the creditor's account is pending as status Originator is waiting for funds provided via a cover.\n*`DUPL`-Payment is a duplicate of another payment.\n*`ERIN`-The Extended Remittance Information (ERI) option is not supported.\n*`FOCR`-Return following a cancellation request.\n*`FR01`-Returned as a result of fraud.\n*`BE01`-Identification of end customer is not consistent with associated account number. (formerly CreditorConsistency).\n*`AC01`-Account number is invalid or missing\n*`AGNT`-Agent in the payment workflow is incorrect.\n*`CURR`-Currency of the payment is incorrect.\n*`AM04`-Amount of funds available to cover specified message amount is insufficient.\n*`FF06`-Category Purpose code is missing or invalid.\n*`RC08`-Routing code not valid for local clearing.\n*`RC04`-Creditor bank identifier is invalid or missing.\n*`AC02`-Debtor account number invalid or missing\r\n\n*`AC13`-Debtor account type is missing or invalid.\n*`RR11`-Invalid or missing identification of a bank proprietary service.\n*`RC03`-Debtor bank identifier is invalid or missing\n*`RC11`-Intermediary Agent is invalid or missing.\n*`FF05`-Local Instrument code is missing or invalid.\n*`RR12`-Invalid or missing identification required within a particular country or payment type.\n*`FF03`-Payment Type Information is missing or invalid. Generic usage if cannot specify Service Level or Local Instrument code.\n*`FF07`-Purpose is missing or invalid.\n*`FF04`-Service Level code is missing or invalid.\n*`RR09`-Structured creditor reference invalid or missing.\n*`BE04`-Specification of creditor's address, which is required for payment, is missing/not correct (formerly IncorrectCreditorAddress).\n*`RR03`-Specification of the creditor's name and/or address needed for regulatory requirements is insufficient or missing.\n*`RR01`-Specification of the debtor’s account or unique identification needed for reasons of regulatory requirements is insufficient or missing\n*`BE07`-Specification of debtor's address, which is required for payment, is missing/not correct.\n*`RR02`-Specification of the debtor’s name and/or address needed for regulatory requirements is insufficient or missing.\r\n\n*`NOAS`-Failed to contact beneficiary.\n*`AM02`-Specific transaction/message amount is greater than allowed maximum.\n*`AM03`-Specific message amount is an non processable currency outside of existing agreement.\n*`NOCM`-Customer account is not compliant with regulatory requirements, for example FICA (in South Africa) or any other regulatory requirements which render an account inactive for certain processing.\n*`MS03`-Reason has not been specified by agent.\n*`MS02`-Reason has not been specified by end customer.\n*`RR05`-Regulatory or Central Bank Reporting information missing, incomplete or invalid.\n*`RR04`-Regulatory Reason \n*`RR07`-Remittance information structure does not comply with rules for payment type.\n*`RR08`-Remittance information truncated to comply with rules for payment type.\n*`CUST`-At request of creditor.\n*`RR06`-Tax information missing, incomplete or invalid.\n*`UPAY`-Payment is not justified.\n*`BE05`-Party who initiated the message is not recognised by the end customer.\n*`AM09`-Amount received is not the amount agreed or expected.\n*`RUTA`-Return following investigation request and no remediation possible."
+      enum:
+      - AM06
+      - RC01
+      - AC06
+      - AM07
+      - AC04
+      - AC07
+      - G004
+      - DUPL
+      - ERIN
+      - FOCR
+      - FR01
+      - BE01
+      - AC01
+      - AGNT
+      - CURR
+      - AM04
+      - FF06
+      - RC08
+      - RC04
+      - AC02
+      - AC13
+      - RR11
+      - RC03
+      - RC11
+      - FF05
+      - RR12
+      - FF03
+      - FF07
+      - FF04
+      - RR09
+      - BE04
+      - RR03
+      - RR01
+      - BE07
+      - RR02
+      - NOAS
+      - AM02
+      - AM03
+      - NOCM
+      - MS03
+      - MS02
+      - RR05
+      - RR04
+      - RR07
+      - RR08
+      - CUST
+      - RR06
+      - UPAY
+      - BE05
+      - AM09
+      - RUTA
+    FinancialInstitutionIdentification12Choice:
+      type: object
+      description: Specifies the details to identify a financial institution.
+      additionalProperties: true
+      oneOf:
+      - type: object
+        additionalProperties: false
+        properties:
+          bicfi:
+            #  Code allocated to a financial institution by the ISO 9362 Registration Authority as described in ISO 9362 "Banking - Banking telecommunication messages - Business identifier code (BIC)".
+            $ref: '#/components/schemas/BICFIDec2014Identifier'
+        required:
+        - bicfi
+      - type: object
+        additionalProperties: false
+        properties:
+          clearing_system_member_identification:
+            #  'Information used to identify a member within a clearing system.  Usage rule: The Tracker will compute the BICFI from the ClearingSystemMemberIdentification if present.'
+            $ref: '#/components/schemas/ClearingSystemMemberIdentification3'
+        required:
+        - clearing_system_member_identification
+    ISONoLocalDateTime:
+      type: string
+      description: an ISODateTime whereby only Zulu/UTC and Local Time with UTC offset are allowed and where local time is blocked.
+      pattern: ^(?:[1-9]\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.[0-9]+)?(?:Z|[+-][01]\d:[0-5]\d)?$
+    Max140Text:
+      type: string
+      description: Specifies a character string with a maximum length of 140 characters.
+      minLength: 1
+      maxLength: 140
+    PaymentScenario6Code:
+      type: string
+      description: "Describes the payment scenario used for a payment transaction.\n*`CCTR`-Indicates customer credit transfer(s).\n*`RCCT`-Indicates a return of a customer credit transfer. "
+      enum:
+      - CCTR
+      - RCCT
+    PaymentStatusReason10Code:
+      type: string
+      description: |-
+        Provides the reason for a payment status.
+        *`G000`-The Status Originator transferred the Credit Transfer to the next Agent or to a Market Infrastructure maintaining the transaction’s service obligations.
+        *`G001`-The Status Originator transferred the Credit Transfer to the next Agent or to a Market Infrastructure where the transaction’s service obligations may no longer be guaranteed.
+        *`G002`-The transaction processing cannot be completed the same day.
+        *`G003`-In an FI to FI Customer Credit Transfer: Credit to creditor's account is pending receipt of required documents. The Status Originator has requested creditor to provide additional documentation.
+        *`G004`-Credit to the creditor's account is pending as status Originator is waiting for funds provided via a cover.
+      enum:
+      - G000
+      - G001
+      - G002
+      - G003
+      - G004
+    RestrictedFINXMax28Text:
+      type: string
+      description: 'Specifies a character string with a maximum length of 35 characters limited to character set X, that is, a-z A-Z / - ? : ( ) . , ‘ + .'
+      minLength: 1
+      maxLength: 28
+      pattern: ^[0-9a-zA-Z/\-\?:\(\)\.,'\+ ]{1,28}$
+    RestrictedFINXMax35Text:
+      type: string
+      description: 'Specifies a character string with a maximum length of 35 characters limited to character set X, that is, a-z A-Z / - ? : ( ) . , ‘ + .'
+      minLength: 1
+      maxLength: 35
+      pattern: ^[0-9a-zA-Z/\-\?:\(\)\.,'\+ ]{1,35}$
+    SettlementMethod1Code:
+      type: string
+      description: |-
+        Specifies the method used to settle the credit transfer instruction.
+        *`INDA`-Settlement is done by the agent instructed to execute a payment instruction.
+        *`INGA`-Settlement is done by the agent instructing and forwarding the payment to the next party in the payment chain.
+        *`COVE`-Settlement is done through a cover payment.
+        *`CLRG`-Settlement is done through a payment clearing system.
+      enum:
+      - INDA
+      - INGA
+      - COVE
+      - CLRG
+    TransactionIndividualStatus5Code:
+      type: string
+      description: "Specifies the status of a single payment transaction.\n*`RJCT`-Payment initiation or individual transaction included in the payment initiation has been rejected.\n*`ACSP`-All preceding checks such as technical validation and customer profile were successful and therefore the payment initiation has been accepted for execution.\n*`ACCC`-Settlement on the creditor's account has been completed. "
+      enum:
+      - RJCT
+      - ACSP
+      - ACCC
+    PaymentStatusRequest9:
+      type: object
+      description: Contains the parameters that allow to update an existing payment.
+      additionalProperties: false
+      properties:
+        from:
+          #  "Specifies the sending MessagingEndpoint that has created this Business Message for the receiving MessagingEndpoint that will process this Business Message.  Note:\tThe sending MessagingEndpoint might be different from the sending address potentially contained in the transport header (as defined in the transport layer)."
+          $ref: '#/components/schemas/BICFIDec2014Identifier'
+        transaction_status:
+          #  Provides detailed information on the transaction status to be updated in the tracker.
+          $ref: '#/components/schemas/TransactionIndividualStatus5Code'
+        transaction_status_date:
+          #  Date for the status.    Date Time must be expressed as UTC/Zulu time (YYYY-MM-DDThh:mm:ss.sssZ) or local time with UTC offset (YYYY-MM-DDThh:mm:ss.sss+/-hh:mm). Local time is not allowed.
+          $ref: '#/components/schemas/ISONoLocalDateTime'
+        transaction_status_reason:
+          #  Provides detailed information on the status reason.
+          $ref: '#/components/schemas/PaymentStatusReason10Code'
+        reject_return_reason:
+          #  Provides detailed information on the reject/return reason.
+          $ref: '#/components/schemas/TrackerPaymentStatusReason3Code'
+        tracker_informing_party:
+          #  Identifies the party that issues the status.
+          $ref: '#/components/schemas/BICFIDec2014Identifier'
+        instruction_identification:
+          #  'Unique identification, as assigned by an instructing party for an instructed party, to unambiguously identify the instruction.  Usage: The instruction identification is a point to point reference that can be used between the instructing party and the instructed party to refer to the individual instruction. It can be included in several messages related to the instruction.  When payment scenario is CCTR, for all statuses, except ACSP/G000 and ACSP/G001: Must contain content of F20 of received MT 103 or Instruction Identification of the received pacs.008. If received message is a message not on SWIFT, must contain equivalent of Instruction Identification of the received message not on SWIFT. For statuses ACSP/G000 and ACSP/G001, must contain (equivalent of) Instruction Identification of sent message not on SWIFT (not validated)  When payment scenario is RCCT, for all statuses, except ACSP/G000 and ACSP/G001, should contain the original instruction identification of the return leg received, when available, otherwise must contain an Instruction Id assigned by the sender of the status update. For statuses ACSP/G000 and ACSP/G001, should contain the original instruction identification of the return leg sent, when available, otherwise must contain an Instruction Id assigned by the sender of the status update.'
+          $ref: '#/components/schemas/RestrictedFINXMax35Text'
+        service_level:
+          #  Agreement under which or rules under which the transaction should be processed.
+          $ref: '#/components/schemas/BusinessService12Code'
+        payment_scenario:
+          #  Indicates if the status update that is provided to the tracker is related to a forward payment or a return payment.
+          $ref: '#/components/schemas/PaymentScenario6Code'
+        settlement_method:
+          #  Method used to settle the (batch of) payment instructions.
+          $ref: '#/components/schemas/SettlementMethod1Code'
+        clearing_system:
+          #  Specification of a pre-agreed offering between clearing agents or the channel through which the payment instruction is processed.
+          $ref: '#/components/schemas/ExternalCashClearingSystem1Code'
+        instructed_agent:
+          #  Agent that is instructed by the previous party in the chain (TrackerInformingParty) to carry out the (set of) instruction(s).
+          $ref: '#/components/schemas/FinancialInstitutionIdentification12Choice'
+        interbank_settlement_amount:
+          #  Amount of money moved between the instructing agent and the instructed agent.
+          $ref: '#/components/schemas/ActiveCurrencyAndAmount'
+        source_currency:
+          #  Specifies the currency from which an amount is to be converted in a currency conversion
+          $ref: '#/components/schemas/ActiveCurrencyCode'
+        target_currency:
+          #  Specifies the currency into which an amount is to be converted in a currency conversion
+          $ref: '#/components/schemas/ActiveCurrencyCode'
+        exchange_rate:
+          #  'Specifies the factor used to convert an amount from one currency into another. This reflects the price at which one currency was bought with another currenty.   Usage: ExchangeRate expresses the ratio between UnitCurrency and QuotedCurrency (ExchangeRate = UnitCurrency/QuotedCurrency).'
+          $ref: '#/components/schemas/BaseOneRate'
+        charge_bearer:
+          #  Specifies which party/parties will bear the charges associated with the processing of the payment transaction.
+          $ref: '#/components/schemas/ChargeBearerType3Code'
+        charges_information:
+          type: array
+          #  Provides information on the charges to be paid by the charge bearer(s) related to the payment transaction.
+          items:
+            $ref: '#/components/schemas/Charges15'
+        confirmed_date:
+          #  Specifies the date and time at which the funds are available,  as reported in the ACCC status update.  Date Time must be expressed as UTC/Zulu time (YYYY-MM-DDThh:mm:ss.sssZ) or local time with UTC offset (YYYY-MM-DDThh:mm:ss.sss+/-hh:mm). Local time is not allowed.
+          $ref: '#/components/schemas/ISONoLocalDateTime'
+        confirmed_amount:
+          #  'Specifies the amount confirmed by the Tracker Informing Party for the ACCC status. '
+          $ref: '#/components/schemas/ActiveCurrencyAndAmount'
+        remaining_to_be_confirmed_amount:
+          #  Amount of money remaining to be confirmed.
+          $ref: '#/components/schemas/ActiveCurrencyAndAmount'
+        previously_confirmed_amount:
+          #  Amount of money previously credited to the creditor and confirmed to the tracking system by the agent.
+          $ref: '#/components/schemas/ActiveCurrencyAndAmount'
+      required:
+      - from
+      - transaction_status
+      - tracker_informing_party
+      - instruction_identification
+      - service_level
+      - payment_scenario
+    UUIDv4Identifier:
+      type: string
+      description: Universally Unique IDentifier (UUID) version 4, as described in IETC RFC 4122 "Universally Unique IDentifier (UUID) URN Namespace".
+      pattern: ^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$      
+  responses:
+    '400-BadRequest':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          examples:
+            invalid_request:
+              value:
+                severity: Fatal
+                code: Sw.gpi.InvalidRequest
+                text: Invalid request
+            missing_mandatory_field:
+              value:
+                severity: Fatal
+                code: Sw.gpi.MandatoryFieldMissing
+                text: Mandatory field %field missing
+            invalid_rbac:
+              value:
+                severity: Fatal
+                code: Sw.gpi.InvalidRBACRole
+                text: RBAC Role
+            request_malformed:
+              value:
+                severity: Fatal
+                code: SwAP501
+                text: API request is malformed
+            unknown_uetr:
+              value:
+                severity: Fatal
+                code: 'INVA/X004'
+                text: 'No payment information tracked for this transaction identifier, Unknown transaction identifier'
+    '401-Unauthorized':
+      description: 'Unauthorized'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          examples:
+            from_authorization_failure:
+              value:
+                severity: Fatal
+                code: Sw.gpi.FromAuthorizationFailure
+                text: From %From does not have the appropriate RBAC role
+    '404-NotFound':
+      description: 'Not Found'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          examples:
+            no_result_found:
+              value:
+                severity: Transient
+                code: Sw.gpi.NoResultFound
+                text: No result found
+            resource_not_exist:
+              value:
+                severity: Fatal
+                code: SwAP506
+                text: 'Resource does not exist.'
+    '413-PayloadTooLarge':
+      description: 'Payload Too Large'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    '429-TooManyRequests':
+      description: 'Too Many Requests'
+      content:
+        application/json:
+          schema: 
+            $ref: '#/components/schemas/ErrorMessage'
+          examples:
+            payload_too_large:
+              value:
+                severity: Transient
+                code: SwAP507
+                text: 'Request cannot be processed at this time. Please try later. (header Retry-After indicates how long to wait before making a follow-up request).'
+    '500-InternalServerError':
+      description: 'Internal Server Error'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          examples:
+            service_internal_error:
+              value:
+                severity: Transient
+                code: Sw.gpi.InternalError
+                text: Internal error
+    '503-ServerUnavailable':
+      description: 'ServerUnavailable'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    '504-GatewayTimeout':
+      description: 'GatewayTimeout'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    'default':
+      description: 'Internal Server Error'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          examples:
+            service_internal_error:
+              value:
+                severity: Transient
+                code: Sw.gpi.InternalError
+                text: Internal error
+    '200-PaymentStatus':
+      description: Status Confirmation Response
+  examples:
+    ACCC_partial_confirmation:
+      summary: Request to update the status of the transaction to ACCC with partial confirmation.
+      value:
+        from: BICCXXXXXXX
+        transaction_status: ACCC
+        tracker_informing_party: BICCXXXXXXX
+        instruction_identification: "789"
+        service_level: G001
+        payment_scenario: CCTR
+        charges_information:
+        - amount:
+            currency: IDR
+            amount: '10'
+          agent:
+            bicfi: BICCXXXXXXX
+        confirmed_date: '2021-11-25T14:33:00.000Z'
+        confirmed_amount:
+          currency: IDR
+          amount: '500'
+        remaining_to_be_confirmed_amount:
+          currency: IDR
+          amount: '490'
+    ACSP_G000_charge_agent_NOTPROVIDED:
+      summary: Request to update the status of the transaction to ACSP/G000 where charges information includes Agent with fixed code NOTPROVIDED.
+      value:
+        from: SWHQBEBBXXX
+        transaction_status: ACSP
+        transaction_status_date: '2021-11-25T14:33:00.000Z'
+        transaction_status_reason: G000
+        tracker_informing_party: SWHQBEBBXXX
+        instruction_identification: "123"
+        service_level: G001
+        payment_scenario: CCTR
+        settlement_method: INGA
+        instructed_agent:
+          bicfi: SWHQBEBBXXX
+        interbank_settlement_amount:
+          currency: USD
+          amount: '970'
+        charge_bearer: CRED
+        charges_information:
+        - amount:
+            currency: USD
+            amount: '10'
+          agent:
+            name: NOTPROVIDED
+        - amount:
+            currency: USD
+            amount: '20'
+          agent:
+            bicfi: SWHQBEBBXXX
+    ACSP_G000_regular:
+      summary: Request to update the status of the transaction to ACSP/G000.
+      value:
+        from: BICAXXXXXXX
+        transaction_status: ACSP
+        transaction_status_date: '2021-11-25T14:33:00.000Z'
+        transaction_status_reason: G000
+        tracker_informing_party: BICAXXXXXXX
+        instruction_identification: " 123"
+        service_level: G001
+        payment_scenario: CCTR
+        settlement_method: INDA
+        instructed_agent:
+          bicfi: SWHQBEBB
+        interbank_settlement_amount:
+          currency: EUR
+          amount: '990'
+        charge_bearer: CRED
+        charges_information:
+        - amount:
+            currency: EUR
+            amount: '10'
+          agent:
+            bicfi: BICAXXXXXXX
+    ACSP_G000_with_clearingsystemmemberidentification:
+      summary: Request to update the status of the transaction to ACSP/G000 identifying the instructed agent with a clearing system member identification.
+      value:
+        from: SWHQBEBBXXX
+        transaction_status: ACSP
+        transaction_status_date: '2021-11-25T14:50:00.000Z'
+        transaction_status_reason: G000
+        tracker_informing_party: SWHQBEBBXXX
+        instruction_identification: "567"
+        service_level: G001
+        payment_scenario: CCTR
+        settlement_method: CLRG
+        clearing_system: FDW
+        instructed_agent:
+          clearing_system_member_identification:
+            clearing_system_identification: USABA
+            member_identification: "'123456789'"
+        interbank_settlement_amount:
+          currency: USD
+          amount: '1000'
+        charge_bearer: SHAR
+    ACSP_G000_return_regular:
+      summary: Request to update the status of the transaction to ACSP/G000 on a return transaction.
+      value:
+        from: BICAXXXXXXX
+        transaction_status: ACSP
+        transaction_status_date: '2021-11-25T14:33:00.000Z'
+        transaction_status_reason: G000
+        tracker_informing_party: BICAXXXXXXX
+        instruction_identification: " 123"
+        service_level: G001
+        payment_scenario: RCCT
+        settlement_method: INDA
+        instructed_agent:
+          bicfi: SWHQBEBB
+        interbank_settlement_amount:
+          currency: EUR
+          amount: '990'
+        charge_bearer: CRED
+        charges_information:
+        - amount:
+            currency: EUR
+            amount: '10'
+          agent:
+            bicfi: BICAXXXXXXX
+    ACCC_return_transaction:
+      summary: Request to update the status of the transaction to ACCC for a return transaction.
+      value:
+        from: BICCXXXXXXX
+        transaction_status: ACCC
+        tracker_informing_party: BICCXXXXXXX
+        instruction_identification: "789"
+        service_level: G001
+        payment_scenario: RCCT
+        charges_information:
+        - amount:
+            currency: IDR
+            amount: '10'
+          agent:
+            bicfi: BICCXXXXXXX
+        confirmed_date: '2021-11-25T14:33:00.000Z'
+        confirmed_amount:
+          currency: IDR
+          amount: '990'
+    ACSP_G000_with_FX:
+      summary: Request to update the status of the transaction with indication of FX.
+      value:  
+        from: BANKBBICXXX
+        transaction_status: ACSP
+        transaction_status_date: '2021-11-25T14:33:00.000Z'
+        transaction_status_reason: G000
+        tracker_informing_party: BANKBBICXXX
+        instruction_identification: ABC123
+        service_level: G001
+        payment_scenario: CCTR
+        settlement_method: INDA
+        instructed_agent:
+          bicfi: BANKCBICXXX
+        interbank_settlement_amount:
+          currency: EUR
+          amount: '1000'
+        source_currency: USD
+        target_currency: EUR
+        exchange_rate: '1.01'
+        charge_bearer: CRED
+        charges_information:
+          - amount:
+              currency: EUR
+              amount: '10'
+            agent:
+              bicfi: BANKBBICXXX
+
+  
+  securitySchemes:
+    oauthBearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque OAuth 2.0
+      description: |-
+        
+        The access token obtained as a result of OAuth 2.0 flows. SWIFT supports two OAuth grant types depending on the API service.
+        * JWT-Bearer grant type [RFC 7523](https://tools.ietf.org/html/rfc7523)
+        * Password grant type
+        
+        This API uses JWT-Bearer grant type.
+        
+        Please visit [SWIFT OAuth Token API](https://developer.swift.com/swift-oauth-token-api) page for more information and examples on how to generate an OAuth token.
+          
+        In this declaration only the basic security element to transport the bearer token of an OAuth2 process is declared.
+security:
+  - oauthBearerToken: []

@@ -1,7 +1,7 @@
 swift:
   base-url: https://sandbox.swift.com
-  endpoint: ${swift.base-url}/swift-apitracker/v5
-  endpoint-cct: ${swift.base-url}/swift-apitracker-gcct/v5
+  endpoint: ${swift.base-url}/swift-apitracker/v6
+  endpoint-cct: ${swift.base-url}/swift-apitracker-gcct/v6
   # Proxy settings, uncomment to enable proxy
   #proxy:
   #  host: myproxy.corp
