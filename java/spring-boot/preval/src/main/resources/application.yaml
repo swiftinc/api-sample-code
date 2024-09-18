@@ -1,6 +1,6 @@
 swift:
   base-url: https://sandbox.swift.com
-  endpoint: ${swift.base-url}/swift-preval-pilot/v2
+  endpoint: ${swift.base-url}/swift-preval/v2
   # Proxy settings, uncomment to enable proxy
   #proxy:
   #  host: myproxy.corp

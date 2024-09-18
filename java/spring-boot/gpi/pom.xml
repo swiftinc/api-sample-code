@@ -71,7 +71,7 @@
                             <modelPackage>${project.groupId}.gpi.cct.oas.model</modelPackage>
                             <apiPackage>${project.groupId}.gpi.cct.oas.api</apiPackage>
                             <inputSpec>
-                                ${project.basedir}/src/main/openapi/SWIFT-API-gpi-api-payment-status-update-CCT-5.0.3-resolved.yaml
+                                ${project.basedir}/src/main/openapi/SWIFT-API-gpi-api-payment-status-update-CCT-6.0.0-swagger.yaml
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -85,7 +85,7 @@
                             <modelPackage>${project.groupId}.gpi.transactiondetails.oas.model</modelPackage>
                             <apiPackage>${project.groupId}.gpi.transactiondetails.oas.api</apiPackage>
                             <inputSpec>
-                                ${project.basedir}/src/main/openapi/SWIFT-API-gpi-transaction-details-devportal-5.0.5-resolved-new.yml
+                                ${project.basedir}/src/main/openapi/SWIFT-API-gpi-api-transactions-and-cancellations-6.0.1-swagger.yaml
                             </inputSpec>
                         </configuration>
                     </execution>
