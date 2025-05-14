@@ -71,6 +71,7 @@ To start the application:
    ```
 
 2. Launch the application
+
    | Language | Command |
    | --- | --- |
    | Spring Boot | `./mvnw spring-boot:run` |

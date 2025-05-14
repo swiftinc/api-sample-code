@@ -30,6 +30,7 @@
         <module>messaging-api</module>
         <module>preval</module>
         <module>swiftref</module>
+        <module>icr</module>
     </modules>
 
     <dependencyManagement>
