@@ -24,7 +24,7 @@ jobs:
         os: ["ubuntu-latest", "windows-latest"]
     name: Build and Test ${{ matrix.node-version }} (${{ matrix.os }})
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup Java for OpenAPI generator plugin
         uses: actions/setup-java@v4
         with:
