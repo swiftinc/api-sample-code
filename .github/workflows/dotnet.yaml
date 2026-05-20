@@ -24,7 +24,7 @@ jobs:
       CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
     name: Build and Test ${{ matrix.dotnet-version }} (${{ matrix.os }})
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup dotnet ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v4
         with:
